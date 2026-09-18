@@ -1,0 +1,4 @@
+{"texto":"B-204 fuga visible en sello mecanico, alarma SEAL-07, charco bajo la bomba","activo_id":"B-204","modelo_bomba":"Acme-X3"}
+{"texto":"B-201 ruido metalico en lado acople, sin fuga","activo_id":"B-201","modelo_bomba":"Acme-X3"}
+{"texto":"B-210 sello gotea, modelo Beta 9","activo_id":"B-210","modelo_bomba":"Beta-9"}
+{"texto":"Alarma en compresor C-12, vibracion alta","activo_id":"C-12","modelo_bomba":""}

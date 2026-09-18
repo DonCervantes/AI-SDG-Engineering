@@ -1,0 +1,12 @@
+version: "1.0-hackathon-ingenieria"
+idioma: es
+etapas:
+  - idea
+  - architecture
+  - build-slice
+  - verification
+  - pitch
+clasificacion:
+  - spike
+  - bounded
+  - architectural
