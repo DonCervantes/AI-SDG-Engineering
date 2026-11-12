@@ -1,216 +1,191 @@
 # AI-SDG-Engineering
 
-Plantilla en español para equipos mixtos (técnicos y no técnicos) que quieren **participar en hackathones de problemas de ingeniería** con IA: fallos, mantenimiento, calidad, energía, logística de planta, tickets técnicos y documentación operativa.
+**Plantilla en español** para equipos mixtos (3–6 personas, con o sin programadores) que compiten en hackathones de **problemas de ingeniería con IA**: fallos, mantenimiento, calidad, energía, logística de planta, tickets y documentación operativa.
+
+> **SDG** = *System Design Guide* (diseño de sistemas de IA), no los ODS de la ONU.
+
+| Esto **sí** es | Esto **no** es |
+| --- | --- |
+| Reloj, roles y plantillas Markdown | Un framework de agentes |
+| Repo de **proceso** (brief → pitch) | Una app con `npm start` |
+| Puente opcional al repo de **código** | Un curso largo de ML |
 
 Une dos ideas:
 
-- **System design de IA:** elegir un patrón mínimo (prompt + herramientas, RAG, clasificador, agente acotado, visión).
-- **Ingeniería visible:** cada decisión vive en un archivo corto, revisable, que sobrevive al chat.
+1. **System design mínimo** — un patrón (clasificar, RAG, prompt+herramientas, agente acotado o visión).
+2. **Ingeniería visible** — cada decisión queda en un archivo corto que sobrevive al chat.
 
-No es un framework de agentes, ni una app lista para correr, ni un curso. Es un **reloj + roles + plantillas Markdown**. El código de la demo lo escribes tú (o tu equipo) en **otro repo**; este repo guarda el brief, la arquitectura, los casos de prueba y el pitch.
-
-Licencia MIT. Inspirado en [ai-system-design-guide](https://github.com/ombharatiya/ai-system-design-guide) y [AI_Engineering_Kit](https://github.com/ArturVargas/AI_Engineering_Kit), recortado para **hackathon + ingeniería**.
+Licencia MIT. Inspirado en [ai-system-design-guide](https://github.com/ombharatiya/ai-system-design-guide) y [AI_Engineering_Kit](https://github.com/ArturVargas/AI_Engineering_Kit); recortado para **hackathon + planta**.
 
 ---
 
-## Qué necesitas antes de empezar
+## Flujo en una mirada
 
-- Git y una cuenta de GitHub.
-- Un equipo de **3–6 personas** (puede haber perfiles no programadores).
-- Un hackathon (o un fin de semana) de **24 o 48 horas**.
-- Un problema con:
-  - un **activo o proceso** (máquina, línea, red, flota, obra);
-  - **datos o documentos** (sensores, CMMS, manuales, planos, tickets);
-  - una **decisión humana** que hoy tarda o falla (diagnóstico, priorización, inspección).
-- Datos **sintéticos, públicos o anonimizados**. Nunca PII, recetas, IPs internas ni dumps de SCADA.
+```text
+CONTEXT + roles
+    → idea / arquitectura
+        → waves (slice 1 → 2 → 3)
+            → verify → fix acotado
+                → rúbrica T+8h y pre-freeze
+                    → demo 90 s + pitch
 
-**No uses este template** si el alcance es “un copiloto general de ingeniería” o “un agente que hace de todo”. Recorta primero.
+Proceso: este repo
+Código:  otro repo  (+ UAK sprint si hay varios agentes/devs)
+```
+
+| Momento | Qué debe existir |
+| --- | --- |
+| T0 | Camino de demo de 90 s, freeze, dueño de submission |
+| T0 + 8 h | *Input de ingeniería → salida visible* (fin wave 1) |
+| Freeze | Solo ensayo y pitch; sin features nuevas |
+| Jurado | `02-architecture` + `04-verification` como evidencia |
 
 ---
 
-## Cómo usarlo (paso a paso)
+## Antes de empezar
 
-Haz esto **en orden**. No saltes al código.
+- Git + GitHub (**Use this template** recomendado).
+- Equipo de **3–6**; puede haber perfiles no técnicos.
+- Evento de **24 h o 48 h**.
+- Un problema con **activo/proceso**, **datos o documentos**, y una **decisión humana** que hoy tarda o falla.
+- Datos **sintéticos, públicos o anonimizados** (nunca PII, recetas, IPs internas ni dumps SCADA).
 
-### 1. Copia este repositorio
+**No uses este template** para “un copiloto general de ingeniería” o “un agente que hace de todo”. Recorta primero.
 
-En GitHub: **Use this template** → *Create a new repository* (recomendado), o clónalo:
+---
+
+## Cómo usarlo (en orden)
+
+### 1. Crea tu copia
 
 ```bash
+# En GitHub: Use this template → Create a new repository
 git clone https://github.com/DonCervantes/AI-SDG-Engineering.git
 cd AI-SDG-Engineering
 ```
 
-Si el equipo ya tiene un repo de código (Python, web, etc.), **deja este repo como el de proceso** y enlázalo en `.ai/CONTEXT.md` → *Repo de código*.
+Si ya tienen repo de código, **este** queda como proceso. Enlázalo en [`.ai/CONTEXT.md`](.ai/CONTEXT.md) → *Repo de código*.
 
-### 2. Asigna roles (15 min)
+### 2. Roles (15 min)
 
-Abre [`ROLES.md`](ROLES.md). Cada rol es dueño de archivos concretos. Nadie “espera a los devs”.
+Lee [`ROLES.md`](ROLES.md). Nadie “espera a los devs”.
 
-| Rol | Quién suele ser | Archivos que rellena |
-| --- | --- | --- |
-| Producto / líder | Alcance y pitch | `01-idea.md`, `05-pitch.md` |
-| Dominio (mantenimiento, calidad, operaciones, civil, energía) | El problema real | casos en `04-verification.md` |
-| Ingeniería / datos / ML | Patrón, datos, slice | `02-architecture.md`, `03-build-slice.md` |
-| Diseño (opcional) | Journey y estados de error | `design-brief.md` |
+| Rol | Archivos |
+| --- | --- |
+| Producto / líder (suele ser dueño de submission) | `01-idea.md`, `05-pitch.md` |
+| Dominio (planta, calidad, mantenimiento…) | casos en `04-verification.md` |
+| Ingeniería / datos / ML | `02-architecture.md`, `03-build-slice.md` |
+| Diseño (opcional) | `design-brief.md` |
 
-Pistas por rol (checklist de una página):
+Checklists: [`tracks/producto.md`](tracks/producto.md) · [`tracks/dominio-ingenieria.md`](tracks/dominio-ingenieria.md) · [`tracks/ingenieria.md`](tracks/ingenieria.md) · [`tracks/diseno.md`](tracks/diseno.md)
 
-- [`tracks/producto.md`](tracks/producto.md)
-- [`tracks/dominio-ingenieria.md`](tracks/dominio-ingenieria.md)
-- [`tracks/ingenieria.md`](tracks/ingenieria.md)
-- [`tracks/diseno.md`](tracks/diseno.md)
+### 3. Brief del equipo (30–45 min)
 
-### 3. Completa el brief del equipo (30–45 min)
+Edita [`.ai/CONTEXT.md`](.ai/CONTEXT.md) **antes** de abrir el chat de IA:
 
-Edita [`.ai/CONTEXT.md`](.ai/CONTEXT.md) **antes de abrir el chat de IA**. Rellena:
+1. Evento, equipo y **dueño de submission**
+2. Problema en **una frase**
+3. Datos permitidos / prohibidos, stack, APIs
+4. Camino de demo de **90 s** (jurado ve → usuario hace → sistema responde → si el modelo falla)
+5. Reloj: inicio, fin, **freeze**, plan-B (video / portátil espejo)
+6. Clasificación: `spike` / `bounded` / `architectural`
+7. Enlace al repo de código (y, si aplica, baseline de sistema existente)
 
-1. Nombre, duración y fecha del evento.
-2. Quién presenta y quién es ingeniería / dominio / producto.
-3. El problema en **una frase**.
-4. Datos permitidos, lo prohibido, stack y APIs de modelos.
-5. El **camino de demo de 90 segundos** (jurado ve → usuario hace → sistema responde → qué se ve si el modelo falla).
-6. Reloj: inicio, fin, **freeze**, dueño de submission y plan-B (video / portátil espejo).
-7. Clasificación: `spike` / `bounded` / `architectural` (marca una).
-8. Enlace al **repo de código** (si ya existe).
+Regla: **no hay código de producto** hasta que exista el camino de 90 s.
 
-Regla: ingeniería **no escribe código de producto** hasta que exista ese camino de 90 segundos.
+### 4. Abre un run
 
-### 4. Abre un run (carpeta de esta edición)
-
-Un **run** es la carpeta de *este* hackathon. No edites las plantillas en `templates/` para el evento: cópialas.
-
-**Recomendado** — script:
+Un **run** = la carpeta de *este* hackathon. No edites `templates/` a mano para el evento.
 
 ```powershell
 .\scripts\new-run.ps1 nombre-del-equipo
-# opcional: .\scripts\new-run.ps1 nombre-del-equipo -WithBaseline -WithAdr
+# opcional: -WithBaseline -WithAdr
 ```
 
 ```bash
 chmod +x scripts/new-run.sh
 ./scripts/new-run.sh nombre-del-equipo
-# opcional: ./scripts/new-run.sh nombre-del-equipo --baseline --adr
+# opcional: --baseline --adr
 ```
 
-Sustituye `nombre-del-equipo` por un slug corto (sin espacios). Actualiza en `.ai/CONTEXT.md` la línea *Run actual*.
+Actualiza *Run actual* en `.ai/CONTEXT.md`. Detalle: [`.ai/runs/README.md`](.ai/runs/README.md).
 
-Si partes de un sistema existente, copia también el baseline: flag `-WithBaseline` / `--baseline`, o a mano desde [`.ai/references/baseline.md`](.ai/references/baseline.md). Si el equipo se pierde entre etapas, usa [`templates/stage-contract.md`](templates/stage-contract.md).
+Extras útiles:
 
-Estructura esperada:
+- Sistema existente → [`.ai/references/baseline.md`](.ai/references/baseline.md)
+- Equipo perdido entre etapas → [`templates/stage-contract.md`](templates/stage-contract.md)
+- Decisión irreversible → copia ADR a [`.ai/adr/`](.ai/adr/)
 
-```text
-.ai/runs/AAAA-MM-DD-nombre-del-equipo/
-  CONTEXT.md
-  01-idea.md
-  02-architecture.md
-  03-build-slice.md
-  04-verification.md
-  05-pitch.md
-  design-brief.md     # si hay UI; si no, déjalo o bórralo
-```
+### 5. Artefactos (reloj del playbook)
 
-Detalle: [`.ai/runs/README.md`](.ai/runs/README.md).
+Sigue [`PLAYBOOK.md`](PLAYBOOK.md). Si vas tarde, **corta alcance**; no añadas modelo.
 
-### 5. Rellena los artefactos en este orden
-
-Sigue el reloj de [`PLAYBOOK.md`](PLAYBOOK.md). Si vas tarde, **corta alcance**; no añadas otro modelo.
-
-| Orden | Tiempo (24 h) | Archivo en el run | Qué debe quedar escrito |
+| Orden | 24 h | Archivo | Debe quedar |
 | --- | --- | --- | --- |
-| 1 | 60 min | `01-idea.md` | Activo, decisión humana, hipótesis, **3 cosas fuera de alcance**, guion de 90 s |
-| 2 | 60 min | `02-architecture.md` | **1** patrón de [`.ai/references/ai-pattern-cards.md`](.ai/references/ai-pattern-cards.md), **1** fuente de datos, **1** fallback |
-| 3 | 3 h + 3 h | `03-build-slice.md` | **Waves:** wave 1 = input→salida; wave 2 = caso feliz de planta. Bucle verify→fix acotado |
-| 4 | 90 min | `04-verification.md` | 5 casos + 1 hostil + 1 “no lo sé” |
-| 5 | 60 min | `05-pitch.md` | Demo 90 s + métrica + siguiente paso |
+| 1 | 60 min | `01-idea.md` | Hipótesis, **3 fuera de alcance**, guion 90 s |
+| 2 | 60 min | `02-architecture.md` | **1** patrón, **1** fuente de datos, **1** fallback |
+| 3 | 3 h + 3 h | `03-build-slice.md` | Waves 1→2 + bucle verify→fix (máx. 3) |
+| 4 | 90 min | `04-verification.md` | 5 casos + hostil + “no lo sé” |
+| 5 | 60 min | `05-pitch.md` | Demo, métrica, siguientes 2 semanas |
 
-Cómo elegir patrón (10 min), en este orden:
+**Elegir patrón (10 min):** etiquetar → clasificar · verdad en docs → RAG · mirar fotos → visión · llamar sistemas → prompt+herramientas · varios pasos con tope → agente acotado. Si dudas entre agente y prompt+herramientas, elige prompt+herramientas.
 
-1. ¿La decisión es **etiquetar**? → clasificar / extraer.
-2. ¿La verdad está en **documentos**? → RAG de corpus cerrado.
-3. ¿Hay que **mirar** fotos? → visión, solo si tienes 10–20 imágenes de ejemplo.
-4. ¿Hay que **llamar sistemas**? → prompt + 1–3 herramientas.
-5. ¿Diagnóstico de varios pasos con tope? → agente acotado (3–5 pasos).
+Fichas: [`.ai/references/ai-pattern-cards.md`](.ai/references/ai-pattern-cards.md) · Antipatraones: [`.ai/references/anti-patterns.md`](.ai/references/anti-patterns.md)
 
-Si dudas entre agente y prompt+herramientas, elige prompt+herramientas.
+En **48 h**: wave 3 (segundo fallo o integración mock) + ADR si hace falta.
 
-Clasifica **antes** de implementar:
+### 6. Código en el otro repo (patrón compañero)
 
-- **spike:** ¿la API o el modelo responde en el dominio?
-- **bounded:** una función demoable sobre un flujo existente (lo habitual).
-- **architectural:** solo si el premio depende de integración o datos reales.
+Aquí no hay servidor. Documenta en `03-build-slice.md` el repo, las waves, el comando de demo, el verify y el fallback.
 
-En 48 h: añade un slice 3 (segundo fallo o integración CMMS/manuales) y, si hay una decisión irreversible, un ADR desde [`templates/adr.md`](templates/adr.md).
-
-### 6. Construye la demo en el repo de código (patrón compañero)
-
-Este template **no incluye servidor ni `npm start`**. Es el repo de **proceso**. El código vive en otro repo (o carpeta), enlazado en `.ai/CONTEXT.md`.
-
-En `03-build-slice.md` documentas:
-
-- qué repo / carpeta contiene el código;
-- las **waves** (qué va en paralelo y qué espera);
-- el comando para levantar la demo;
-- el verify del slice y el tope de intentos;
-- el input y el output (campos o JSON);
-- el fallback visible si el modelo o la API caen.
-
-**Orquestación multi-agente (opcional, en el repo de código):**
-
-Si hay **≥2 agentes** o **≥2 personas** editando el mismo código en paralelo, instala allí un kit de coordinación — recomendado: [upiixia-agentic-kit](https://github.com/JoahanMorales/upiixia-agentic-kit) en modo `sprint`. **No** lo instales en este repo: aquí siguen mandando `CONTEXT.md`, roles y el pitch.
+**¿Varios agentes o varias personas en el mismo código?** Orquesta **allí**, no aquí. Recomendado: [upiixia-agentic-kit](https://github.com/JoahanMorales/upiixia-agentic-kit) en modo `sprint` (en Windows: Git Bash).
 
 ```bash
-# En el repo de CÓDIGO (no en AI-SDG-Engineering):
+# En el repo de CÓDIGO:
 git clone --depth 1 https://github.com/JoahanMorales/upiixia-agentic-kit ~/.uak-kit
 bash ~/.uak-kit/install.sh --mode sprint .
 ```
 
-En Windows usa **Git Bash** para UAK. Marca la casilla en `.ai/CONTEXT.md` → *Orquestación en el repo de código*.
+Marca la casilla en `CONTEXT.md`. Este repo sigue mandando el brief, los roles y el pitch.
 
-Reglas de recorte (no negociables):
+**Recorte no negociable**
 
-1. Un solo **camino de demo**. El jurado no recorre tu backlog.
-2. El modelo puede fallar en público: el **fallback es parte del producto**.
-3. Si a las 8 h no hay *input de ingeniería → salida visible*, el alcance es demasiado grande (wave 1 incompleta).
-4. No abras un agente de N pasos si un clasificador o un RAG cerrado resuelve el problema.
-5. Dataset sintético o anonimizado en el run o en el repo de código.
-6. Tras el **freeze**: solo ensayo y arreglos del guion de 90 s.
+1. Un solo camino de demo.
+2. Fallback visible si el modelo falla.
+3. A las 8 h: input → salida visible, o el alcance es demasiado grande.
+4. No abras un agente de N pasos si basta clasificar o un RAG cerrado.
+5. Dataset sintético o anonimizado.
+6. Tras el freeze: solo ensayo / arreglo del guion de 90 s.
 
-Estándares cortos mientras construyes:
+Estándares: [`standards/ingenieria.md`](standards/ingenieria.md) · [`standards/verificacion.md`](standards/verificacion.md) · [`standards/seguridad.md`](standards/seguridad.md)
 
-- [`standards/ingenieria.md`](standards/ingenieria.md)
-- [`standards/verificacion.md`](standards/verificacion.md)
-- [`standards/seguridad.md`](standards/seguridad.md)
+Agentes (Cursor y otros): [`AGENTS.md`](AGENTS.md) · [`.cursor/rules/contexto-antes-de-codigo.mdc`](.cursor/rules/contexto-antes-de-codigo.mdc) · skill de dominio [`.cursor/skills/dominio-hackathon/`](.cursor/skills/dominio-hackathon/)
 
-Los agentes en Cursor deben leer el brief primero: [`.cursor/rules/contexto-antes-de-codigo.mdc`](.cursor/rules/contexto-antes-de-codigo.mdc) y [`AGENTS.md`](AGENTS.md).
+### 7. Verificar y ensayar
 
-### 7. Verifica y ensaya
+- Dominio valida `04-verification.md` en **fresco**.
+- Standup cada 3 h: [`checklists/standup.md`](checklists/standup.md)
+- Rúbrica **T+8 h** y **pre-freeze**: [`checklists/rubrica-midhack.md`](checklists/rubrica-midhack.md)
+- Día de demo: [`checklists/demo.md`](checklists/demo.md)
 
-- Dominio valida los casos de `04-verification.md` **antes** del jurado.
-- Standup cada 3 horas (10 min): [`checklists/standup.md`](checklists/standup.md) (incluye minutos hasta el freeze).
-- Rúbrica en **T+8 h** y **pre-freeze**: [`checklists/rubrica-midhack.md`](checklists/rubrica-midhack.md).
-- Día de demo: [`checklists/demo.md`](checklists/demo.md) (freeze, plan-B, cronómetro 90 s, caso de fallo narrado).
+### 8. Presentar con evidencia
 
-### 8. Presenta con evidencia
-
-El pitch vive en `05-pitch.md`. Primera diapositiva o terminal: nombre del equipo y roles. Si el jurado pregunta “¿por qué este diseño?”, enseña `02-architecture.md` y `04-verification.md`, no el historial del chat. Presenta el **dueño de submission** (o co-presenta con dominio).
+Pitch en `05-pitch.md`. Primera slide: equipo y roles. Ante “¿por qué este diseño?”, enseña arquitectura y verificación — no el chat. Presenta el **dueño de submission** (o co-presenta con dominio).
 
 ---
 
-## Aprende con los ejemplos (15–20 min)
+## Ejemplos (15–20 min)
 
-Hackathones **ficticios** ya rellenados (la verificación es ilustrativa; no hay binario aquí):
+Runs ficticios ya rellenados. La columna “¿Pasó?” es **ilustrativa**; no hay binario en este repo.
 
 | Ejemplo | Patrón | Carpeta |
 | --- | --- | --- |
 | Bombas / OT | Clasificar + RAG filtrado por modelo | [`.ai/runs/_ejemplo-mantenimiento-planta/`](.ai/runs/_ejemplo-mantenimiento-planta/) |
 | Alarmas de línea | Solo clasificar / extraer | [`.ai/runs/_ejemplo-clasificador-alarmas/`](.ai/runs/_ejemplo-clasificador-alarmas/) |
 
-1. Léelos en orden: `CONTEXT.md` → `01` … `05`.
-2. Copia el que se parezca a tu problema y **cambia el activo**.
-3. Lecciones: (bombas) clasificar + RAG filtrado gana al agente total; (alarmas) un JSON schema basta.
-
-No trates los ejemplos como código de producción.
+1. Lee `CONTEXT.md` → `01` … `05`.
+2. Copia el más parecido y cambia el activo.
+3. Lecciones: clasificar+RAG filtrado gana al “agente total”; a veces un JSON schema basta.
 
 ---
 
@@ -218,50 +193,51 @@ No trates los ejemplos como código de producción.
 
 ```text
 .ai/
-  CONTEXT.md              Brief del equipo (editar primero; reloj + repo código)
-  adr/                    Decisiones irreversibles (copiar templates/adr.md)
-  workflow.yaml           Orden de etapas (idea → pitch)
-  references/             Fichas de patrón, baseline, anti-patrones
-  runs/                   Un directorio por hackathon (+ 2 ejemplos)
-templates/                01–05 (waves), design-brief, adr, stage-contract
-scripts/                  new-run.ps1 / new-run.sh
-tracks/                   Checklist por rol
-standards/                Ingeniería, verificación (verify→fix), seguridad
-checklists/               Standup, demo, rúbrica T+8h / pre-freeze
-.cursor/rules/            Leer CONTEXT + run antes de código
-.cursor/skills/           Skill de dominio (casos y seguridad de planta)
-AGENTS.md                 Misma regla para agentes multi-herramienta
-PLAYBOOK.md               Reloj, freeze, waves 24 h / 48 h
-ROLES.md                  Dueños de archivo y handoffs
-CONTRIBUTING.md           Cómo aportar sin hinchar el kit
+  CONTEXT.md           Brief (reloj, freeze, repo de código)
+  adr/                 Decisiones irreversibles
+  references/          Patrones, baseline, anti-patrones
+  runs/                Un run por hackathon + 2 ejemplos
+templates/             01–05 (waves), design-brief, adr, stage-contract
+scripts/               new-run.ps1 / new-run.sh
+tracks/                Checklist por rol
+standards/             Ingeniería, verificación, seguridad
+checklists/            Standup, demo, rúbrica mid-hack
+.cursor/               Regla + skill de dominio
+.github/               Plantillas de issues
+AGENTS.md              Reglas para agentes
+PLAYBOOK.md            Reloj 24 h / 48 h
+ROLES.md               Dueños de archivo
+CONTRIBUTING.md        Cómo aportar sin hinchar el kit
 ```
 
-Handoff (no reconstruyas el producto en silencio):
+**Handoff**
 
 ```text
-Dominio describe síntoma y decisión
-        → Producto recorta y escribe la historia de demo
-                → Ingeniería elige patrón y construye un slice
-                        → Dominio valida los 5 casos
-                                → Producto ensaya el pitch
+Dominio (síntoma + decisión)
+  → Producto (recorte + historia 90 s)
+    → Ingeniería (patrón + waves)
+      → Dominio (valida 5 casos)
+        → Producto (pitch + submission)
 ```
 
-Si el código obliga a cambiar una decisión, **edita el Markdown upstream** y avisa al dueño del archivo.
+Si el código cambia una decisión, edita el Markdown **upstream** y avisa al dueño del archivo.
 
 ---
 
 ## Qué no hacer
 
-- Subir `.env`, credenciales, dumps de planta o datos personales (`.gitignore` ya ignora `.env` y `.ai/runs/*/.secrets`).
-- Tratar las salidas del modelo como **permiso de trabajo** o arranque de equipo.
-- Mezclar manuales de dos modelos de máquina en el mismo índice sin metadatos.
-- Empezar por UI o por un segundo patrón de IA “por si acaso”.
+- Subir `.env`, credenciales, dumps de planta o PII.
+- Tratar la salida del modelo como permiso de trabajo o arranque de equipo.
+- Mezclar manuales de dos modelos de máquina sin metadatos.
+- Empezar por UI o por un segundo patrón “por si acaso”.
 - Dejar el camino de demo solo en el chat.
-- Instalar UAK (u otro motor multi-agente) **en este** repo de proceso: va en el repo de código.
+- Instalar UAK (u otro motor multi-agente) **en este** repo.
 - Seguir codeando features después del freeze.
 
 ---
 
-## Origen y licencia
+## Contribuir y licencia
 
-MIT. Cómo aportar: [`CONTRIBUTING.md`](CONTRIBUTING.md). No copies credenciales, PII ni datos de planta sensibles a los artefactos: usa identificadores y resúmenes.
+MIT. Cómo aportar: [`CONTRIBUTING.md`](CONTRIBUTING.md). Issues: plantillas en `.github/ISSUE_TEMPLATE/`.
+
+No copies credenciales ni datos sensibles a los artefactos: usa identificadores y resúmenes.
