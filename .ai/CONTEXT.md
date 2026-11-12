@@ -17,6 +17,14 @@ Completa esto en los primeros 30 minutos. La IA y el equipo leen este archivo an
 - Dominio (planta / calidad / mantenimiento / otro):
 - Producto:
 - Diseño (si hay):
+- Dueño de submission (una persona):
+
+## Reloj (obligatorio)
+
+- Inicio (fecha + hora + zona):
+- Fin / entrega al jurado:
+- **Freeze** (dejar de codear; solo ensayo y pitch): ____ min antes del fin
+- Plan-B si cae la red: [ ] video 20–40 s  [ ] portátil espejo  [ ] captura del caso feliz
 
 ## Problema de ingeniería (una frase)
 
@@ -47,3 +55,7 @@ Completa esto en los primeros 30 minutos. La IA y el equipo leen este archivo an
 - Repo de código:
 - Dataset:
 - Run actual: `.ai/runs/`
+- Baseline (si ya existe CMMS/SCADA/tickets): [ ] no aplica  [ ] copiado al run (`baseline.md`)
+- Orquestación en el repo de código (opcional): [ ] UAK sprint  [ ] otro  [ ] no aplica
+  - Cuándo sí UAK: ≥2 agentes o ≥2 personas editando el mismo repo de código en paralelo.
+  - Este repo (AI-SDG) sigue siendo el de proceso; UAK no se instala aquí.

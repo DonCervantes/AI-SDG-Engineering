@@ -4,9 +4,10 @@ Un equipo de 3–6 personas. Nadie “espera a los devs”: cada rol tiene dueñ
 
 ## Ingeniería de software / datos / ML
 
-- Dueño de `02-architecture.md` y `03-build-slice.md`.
+- Dueño de `02-architecture.md` y `03-build-slice.md` (waves + verify→fix).
 - Elige patrón (ver fichas), límites de tokens, latencia y fallback.
 - Integra **una** fuente de datos demoable.
+- Si hay varios agentes/devs en paralelo, orquesta en el **repo de código** (p. ej. UAK sprint).
 - No discute el problema en el código: está en `01-idea.md`.
 
 ## Dominio de ingeniería (mantenimiento, calidad, operaciones, civil, energía)
@@ -20,6 +21,7 @@ Un equipo de 3–6 personas. Nadie “espera a los devs”: cada rol tiene dueñ
 
 - Dueño de `01-idea.md` y `05-pitch.md`.
 - Recorta alcance. Protege el camino de 90 segundos.
+- Suele ser el **dueño de submission** (freeze, plan-B, entrega): una sola persona en `CONTEXT.md`.
 - Presenta o co-presenta.
 
 ## Diseño (opcional)

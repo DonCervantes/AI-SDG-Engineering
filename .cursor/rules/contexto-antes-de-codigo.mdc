@@ -1,0 +1,19 @@
+---
+description: Leer el brief y el run actuales antes de proponer o escribir código de demo.
+alwaysApply: true
+---
+
+# Contexto antes de código
+
+Este repositorio es de **proceso** (brief, arquitectura, verificación, pitch), no el servidor de la demo.
+
+Antes de generar o cambiar código de producto:
+
+1. Lee `.ai/CONTEXT.md` (problema, restricciones, camino de 90 s, freeze, repo de código).
+2. Lee el **run actual** indicado en `CONTEXT.md` → `Run actual` (como mínimo `01-idea.md`, `02-architecture.md`, `03-build-slice.md`).
+3. Respeta el patrón elegido, el fuera de alcance y las acciones prohibidas.
+4. Si el trabajo es implementación, hazlo en el **repo de código** enlazado; aquí solo actualiza Markdown si cambia una decisión.
+5. No inventes un segundo patrón de IA ni acciones físicas sin confirmación humana.
+6. Preferir recortar alcance a añadir modelo, herramienta o agente.
+
+Si falta el camino de demo de 90 s en `CONTEXT.md`, pide que lo completen antes de construir.

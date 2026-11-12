@@ -27,6 +27,6 @@ Inbox → síntoma B-204 (fuga en sello) → prioridad alta + cita Manual-Acme-X
 
 ## Evidencia de dominio
 
-- 12 tickets sintéticos con códigos de alarma
-- Manuales Acme X3 y Beta 9 (PDF)
+- Tickets sintéticos en `data/tickets_sinteticos.jsonl`
+- Manuales sintéticos Acme X3 y Beta 9 en `data/manuales/`
 - Norma interna: no ejecutar trabajo en caliente sin LOTO; la IA no autoriza

@@ -1,0 +1,27 @@
+name: Mejora de plantilla
+description: Propuesta que mantiene el kit corto y orientado a hackathon
+title: "[mejora] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Problema o friccion
+      description: Quien se atora (producto, dominio, ingenieria) y en que minuto.
+    validations:
+      required: true
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Propuesta
+      description: Cambio minimo en Markdown/scripts. Evita frameworks.
+    validations:
+      required: true
+  - type: checkboxes
+    id: limites
+    attributes:
+      label: Limites
+      options:
+        - label: No añade una app ni dependencias de demo
+        - label: No mete motor multi-agente en este repo
+        - label: Usa datos sinteticos / sin PII

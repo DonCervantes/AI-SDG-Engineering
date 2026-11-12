@@ -1,0 +1,30 @@
+name: Bug en la plantilla
+description: Algo del kit de proceso esta roto o confuso
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: que
+    attributes:
+      label: Que paso
+      description: Archivo, paso del README o script afectado.
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Que esperabas
+    validations:
+      required: true
+  - type: dropdown
+    id: so
+    attributes:
+      label: Entorno
+      options:
+        - Windows (PowerShell)
+        - Windows (Git Bash)
+        - macOS
+        - Linux
+        - Solo lectura en GitHub
+    validations:
+      required: true

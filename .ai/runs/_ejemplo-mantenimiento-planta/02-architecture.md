@@ -7,7 +7,7 @@
 
 ## Datos
 
-- Fuente: `data/tickets_sinteticos.jsonl` y `data/manuales/`
+- Fuente: `data/tickets_sinteticos.jsonl` y `data/manuales/*.md` (sintéticos; no PDF de fabricante)
 - Cómo se indexa: chunks de ~400 tokens con metadato `modelo_bomba`
 - Metadatos: activo, modelo, planta
 - Qué no entra: nombres de técnicos, IPs, recetas de proceso

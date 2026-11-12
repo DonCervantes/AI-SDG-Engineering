@@ -70,7 +70,9 @@ Edita [`.ai/CONTEXT.md`](.ai/CONTEXT.md) **antes de abrir el chat de IA**. Relle
 3. El problema en **una frase**.
 4. Datos permitidos, lo prohibido, stack y APIs de modelos.
 5. El **camino de demo de 90 segundos** (jurado ve → usuario hace → sistema responde → qué se ve si el modelo falla).
-6. Clasificación: `spike` / `bounded` / `architectural` (marca una).
+6. Reloj: inicio, fin, **freeze**, dueño de submission y plan-B (video / portátil espejo).
+7. Clasificación: `spike` / `bounded` / `architectural` (marca una).
+8. Enlace al **repo de código** (si ya existe).
 
 Regla: ingeniería **no escribe código de producto** hasta que exista ese camino de 90 segundos.
 
@@ -78,26 +80,22 @@ Regla: ingeniería **no escribe código de producto** hasta que exista ese camin
 
 Un **run** es la carpeta de *este* hackathon. No edites las plantillas en `templates/` para el evento: cópialas.
 
-En PowerShell (Windows), desde la raíz del repo:
+**Recomendado** — script:
 
 ```powershell
-$run = ".ai\runs\$(Get-Date -Format 'yyyy-MM-dd')-nombre-del-equipo"
-New-Item -ItemType Directory -Path $run -Force | Out-Null
-Copy-Item .ai\CONTEXT.md "$run\CONTEXT.md"
-Copy-Item templates\01-idea.md, templates\02-architecture.md, templates\03-build-slice.md, templates\04-verification.md, templates\05-pitch.md, templates\design-brief.md $run
+.\scripts\new-run.ps1 nombre-del-equipo
+# opcional: .\scripts\new-run.ps1 nombre-del-equipo -WithBaseline -WithAdr
 ```
 
-En bash / macOS / Linux:
-
 ```bash
-RUN=".ai/runs/$(date +%Y-%m-%d)-nombre-del-equipo"
-mkdir -p "$RUN"
-cp .ai/CONTEXT.md "$RUN/CONTEXT.md"
-cp templates/01-idea.md templates/02-architecture.md templates/03-build-slice.md \
-   templates/04-verification.md templates/05-pitch.md templates/design-brief.md "$RUN/"
+chmod +x scripts/new-run.sh
+./scripts/new-run.sh nombre-del-equipo
+# opcional: ./scripts/new-run.sh nombre-del-equipo --baseline --adr
 ```
 
 Sustituye `nombre-del-equipo` por un slug corto (sin espacios). Actualiza en `.ai/CONTEXT.md` la línea *Run actual*.
+
+Si partes de un sistema existente, copia también el baseline: flag `-WithBaseline` / `--baseline`, o a mano desde [`.ai/references/baseline.md`](.ai/references/baseline.md). Si el equipo se pierde entre etapas, usa [`templates/stage-contract.md`](templates/stage-contract.md).
 
 Estructura esperada:
 
@@ -122,7 +120,7 @@ Sigue el reloj de [`PLAYBOOK.md`](PLAYBOOK.md). Si vas tarde, **corta alcance**;
 | --- | --- | --- | --- |
 | 1 | 60 min | `01-idea.md` | Activo, decisión humana, hipótesis, **3 cosas fuera de alcance**, guion de 90 s |
 | 2 | 60 min | `02-architecture.md` | **1** patrón de [`.ai/references/ai-pattern-cards.md`](.ai/references/ai-pattern-cards.md), **1** fuente de datos, **1** fallback |
-| 3 | 3 h + 3 h | `03-build-slice.md` | Slice 1: una pantalla o API que ya llama al modelo. Slice 2: el caso feliz de planta |
+| 3 | 3 h + 3 h | `03-build-slice.md` | **Waves:** wave 1 = input→salida; wave 2 = caso feliz de planta. Bucle verify→fix acotado |
 | 4 | 90 min | `04-verification.md` | 5 casos + 1 hostil + 1 “no lo sé” |
 | 5 | 60 min | `05-pitch.md` | Demo 90 s + métrica + siguiente paso |
 
@@ -144,22 +142,39 @@ Clasifica **antes** de implementar:
 
 En 48 h: añade un slice 3 (segundo fallo o integración CMMS/manuales) y, si hay una decisión irreversible, un ADR desde [`templates/adr.md`](templates/adr.md).
 
-### 6. Construye la demo en el repo de código
+### 6. Construye la demo en el repo de código (patrón compañero)
 
-Este template **no incluye servidor ni `npm start`**. En `03-build-slice.md` documentas:
+Este template **no incluye servidor ni `npm start`**. Es el repo de **proceso**. El código vive en otro repo (o carpeta), enlazado en `.ai/CONTEXT.md`.
+
+En `03-build-slice.md` documentas:
 
 - qué repo / carpeta contiene el código;
+- las **waves** (qué va en paralelo y qué espera);
 - el comando para levantar la demo;
+- el verify del slice y el tope de intentos;
 - el input y el output (campos o JSON);
 - el fallback visible si el modelo o la API caen.
+
+**Orquestación multi-agente (opcional, en el repo de código):**
+
+Si hay **≥2 agentes** o **≥2 personas** editando el mismo código en paralelo, instala allí un kit de coordinación — recomendado: [upiixia-agentic-kit](https://github.com/JoahanMorales/upiixia-agentic-kit) en modo `sprint`. **No** lo instales en este repo: aquí siguen mandando `CONTEXT.md`, roles y el pitch.
+
+```bash
+# En el repo de CÓDIGO (no en AI-SDG-Engineering):
+git clone --depth 1 https://github.com/JoahanMorales/upiixia-agentic-kit ~/.uak-kit
+bash ~/.uak-kit/install.sh --mode sprint .
+```
+
+En Windows usa **Git Bash** para UAK. Marca la casilla en `.ai/CONTEXT.md` → *Orquestación en el repo de código*.
 
 Reglas de recorte (no negociables):
 
 1. Un solo **camino de demo**. El jurado no recorre tu backlog.
 2. El modelo puede fallar en público: el **fallback es parte del producto**.
-3. Si a las 8 h no hay *input de ingeniería → salida visible*, el alcance es demasiado grande.
+3. Si a las 8 h no hay *input de ingeniería → salida visible*, el alcance es demasiado grande (wave 1 incompleta).
 4. No abras un agente de N pasos si un clasificador o un RAG cerrado resuelve el problema.
 5. Dataset sintético o anonimizado en el run o en el repo de código.
+6. Tras el **freeze**: solo ensayo y arreglos del guion de 90 s.
 
 Estándares cortos mientras construyes:
 
@@ -167,29 +182,35 @@ Estándares cortos mientras construyes:
 - [`standards/verificacion.md`](standards/verificacion.md)
 - [`standards/seguridad.md`](standards/seguridad.md)
 
+Los agentes en Cursor deben leer el brief primero: [`.cursor/rules/contexto-antes-de-codigo.mdc`](.cursor/rules/contexto-antes-de-codigo.mdc) y [`AGENTS.md`](AGENTS.md).
+
 ### 7. Verifica y ensaya
 
 - Dominio valida los casos de `04-verification.md` **antes** del jurado.
-- Standup cada 3 horas (10 min): [`checklists/standup.md`](checklists/standup.md).
-- Día de demo: [`checklists/demo.md`](checklists/demo.md) (cronómetro 90 s, caso de fallo narrado, respaldo si cae la red).
+- Standup cada 3 horas (10 min): [`checklists/standup.md`](checklists/standup.md) (incluye minutos hasta el freeze).
+- Rúbrica en **T+8 h** y **pre-freeze**: [`checklists/rubrica-midhack.md`](checklists/rubrica-midhack.md).
+- Día de demo: [`checklists/demo.md`](checklists/demo.md) (freeze, plan-B, cronómetro 90 s, caso de fallo narrado).
 
 ### 8. Presenta con evidencia
 
-El pitch vive en `05-pitch.md`. Primera diapositiva o terminal: nombre del equipo y roles. Si el jurado pregunta “¿por qué este diseño?”, enseña `02-architecture.md` y `04-verification.md`, no el historial del chat.
+El pitch vive en `05-pitch.md`. Primera diapositiva o terminal: nombre del equipo y roles. Si el jurado pregunta “¿por qué este diseño?”, enseña `02-architecture.md` y `04-verification.md`, no el historial del chat. Presenta el **dueño de submission** (o co-presenta con dominio).
 
 ---
 
-## Aprende con el ejemplo (15 min)
+## Aprende con los ejemplos (15–20 min)
 
-Hay un hackathon **ficticio ya rellenado**:
+Hackathones **ficticios** ya rellenados (la verificación es ilustrativa; no hay binario aquí):
 
-[`.ai/runs/_ejemplo-mantenimiento-planta/`](.ai/runs/_ejemplo-mantenimiento-planta/)
+| Ejemplo | Patrón | Carpeta |
+| --- | --- | --- |
+| Bombas / OT | Clasificar + RAG filtrado por modelo | [`.ai/runs/_ejemplo-mantenimiento-planta/`](.ai/runs/_ejemplo-mantenimiento-planta/) |
+| Alarmas de línea | Solo clasificar / extraer | [`.ai/runs/_ejemplo-clasificador-alarmas/`](.ai/runs/_ejemplo-clasificador-alarmas/) |
 
-1. Léelo en este orden: `CONTEXT.md` → `01-idea.md` → `02-architecture.md` → `03-build-slice.md` → `04-verification.md` → `05-pitch.md`.
-2. Cópialo a tu run si te sirve de esqueleto y **cambia el activo** (envasado, red, flota, obra, HVAC).
-3. Lección del ejemplo: **clasificar + RAG filtrado por modelo de máquina** gana a “un agente que lo investiga todo” en 24 horas.
+1. Léelos en orden: `CONTEXT.md` → `01` … `05`.
+2. Copia el que se parezca a tu problema y **cambia el activo**.
+3. Lecciones: (bombas) clasificar + RAG filtrado gana al agente total; (alarmas) un JSON schema basta.
 
-No trates el ejemplo como código de producción.
+No trates los ejemplos como código de producción.
 
 ---
 
@@ -197,16 +218,22 @@ No trates el ejemplo como código de producción.
 
 ```text
 .ai/
-  CONTEXT.md              Brief del equipo (editar primero)
+  CONTEXT.md              Brief del equipo (editar primero; reloj + repo código)
+  adr/                    Decisiones irreversibles (copiar templates/adr.md)
   workflow.yaml           Orden de etapas (idea → pitch)
   references/             Fichas de patrón, baseline, anti-patrones
-  runs/                   Un directorio por hackathon
-templates/                Copias en blanco (01–05, design-brief, adr, stage-contract)
+  runs/                   Un directorio por hackathon (+ 2 ejemplos)
+templates/                01–05 (waves), design-brief, adr, stage-contract
+scripts/                  new-run.ps1 / new-run.sh
 tracks/                   Checklist por rol
-standards/                Ingeniería, verificación, seguridad
-checklists/               Standup y día de demo
-PLAYBOOK.md               Reloj 24 h / 48 h
+standards/                Ingeniería, verificación (verify→fix), seguridad
+checklists/               Standup, demo, rúbrica T+8h / pre-freeze
+.cursor/rules/            Leer CONTEXT + run antes de código
+.cursor/skills/           Skill de dominio (casos y seguridad de planta)
+AGENTS.md                 Misma regla para agentes multi-herramienta
+PLAYBOOK.md               Reloj, freeze, waves 24 h / 48 h
 ROLES.md                  Dueños de archivo y handoffs
+CONTRIBUTING.md           Cómo aportar sin hinchar el kit
 ```
 
 Handoff (no reconstruyas el producto en silencio):
@@ -230,9 +257,11 @@ Si el código obliga a cambiar una decisión, **edita el Markdown upstream** y a
 - Mezclar manuales de dos modelos de máquina en el mismo índice sin metadatos.
 - Empezar por UI o por un segundo patrón de IA “por si acaso”.
 - Dejar el camino de demo solo en el chat.
+- Instalar UAK (u otro motor multi-agente) **en este** repo de proceso: va en el repo de código.
+- Seguir codeando features después del freeze.
 
 ---
 
 ## Origen y licencia
 
-MIT. No copies credenciales, PII ni datos de planta sensibles a los artefactos: usa identificadores y resúmenes.
+MIT. Cómo aportar: [`CONTRIBUTING.md`](CONTRIBUTING.md). No copies credenciales, PII ni datos de planta sensibles a los artefactos: usa identificadores y resúmenes.
